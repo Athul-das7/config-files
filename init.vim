@@ -18,13 +18,14 @@ Plug 'vim-airline/vim-airline-themes' " themes for airline
 Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
 Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
 " Plug 'https://github.com/neoclide/coc.nvim'  " Auto Completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " Auto complete
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Auto complete 
 Plug 'https://github.com/ryanoasis/vim-devicons' " Developer Icons
 Plug 'https://github.com/tc50cal/vim-terminal' " Vim Terminal
 Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
 Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple cursors
 Plug 'honza/vim-snippets'  " snippets for nvim
 Plug 'https://github.com/jiangmiao/auto-pairs' " auto bracket matcher
+Plug 'ray-x/lsp_signature.nvim'  " will show the details inside the function like vs code
 
 set encoding=UTF-8
 
@@ -70,6 +71,7 @@ let g:airline_symbols.linenr = ''
 
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
 
+" My Customization
 " coc to use tabs to move
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -98,7 +100,7 @@ let g:coc_snippet_prev = '<c-k>'
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 
 " just hit  enter to complete the snippet
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " enable tab line...the top line
@@ -121,3 +123,6 @@ set showtabline=2
 
 " We don't need to see things like -- INSERT -- anymore
 set noshowmode
+
+" To hide the tilde in the new file 
+:highlight EndOfBuffer ctermfg=bg guifg=bg
