@@ -7,12 +7,13 @@
 :set softtabstop=4
 :set mouse=a
 :set cursorline
+:set nowrap
 
 call plug#begin()
 
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
-Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+" Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
 Plug 'https://github.com/vim-airline/vim-airline' " Status bar
 Plug 'vim-airline/vim-airline-themes' " themes for airline
 " Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
@@ -38,6 +39,9 @@ Plug 'nvim-telescope/telescope.nvim' " telescope for dashboard
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' } " telescope dependency
 Plug 'liuchengxu/vim-which-key' " space key that gives a box of suggestions 
 Plug 'preservim/nerdcommenter' " vim commenter for which_key 
+Plug 'metakirby5/codi.vim' " a interactive plug that shows the output of our code like an interpreter - scratch
+Plug 'junegunn/goyo.vim' " for zen mode 
+Plug 'SirVer/ultisnips'
 
 set encoding=UTF-8
 
@@ -52,7 +56,7 @@ nmap <F8> :TagbarToggle<CR>
 
 :set completeopt-=preview " For No Previews
 
-:colorscheme challenger_deep 
+:colorscheme spacecamp
 
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
@@ -91,10 +95,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+" Use <Tab> and <S-Tab> to navigate the completion list:
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 
 " Use <C-l> for trigger snippet expand.
 imap <C-l> <Plug>(coc-snippets-expand)
@@ -150,12 +155,12 @@ vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
 " Create map to add keys to
 let g:which_key_map =  {}
 " Define a separator
-let g:which_key_sep = '→'
-" set timeoutlen=100
-
+let g:which_key_sep = '➟'
+let g:which_key_timeout=100
 
 " Not a fan of floating windows for this
 let g:which_key_use_floating_win = 0
+let g:which_key_hspace = 5
 
 " Change the colors if you want
 highlight default link WhichKey          Operator
@@ -168,11 +173,13 @@ autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
 
+" nnoremap <leader>i :vsplit ~/.config/nvim/init.vim<cr>
 " Single mappings
 let g:which_key_map['/'] = [ '<Plug>NERDCommenterToggle'  , 'comment' ]
-let g:which_key_map['e'] = [ ':CocCommand explorer'       , 'explorer' ]
+let g:which_key_map['e'] = [ '<C-t>'       , 'file explorer' ] " :CocCommand explorer
 let g:which_key_map['f'] = [ ':Files'                     , 'search files' ]
-let g:which_key_map['h'] = [ '<C-W>s'                     , 'split below']
+let g:which_key_map['i'] = [ ':vsplit ~/.config/nvim/init.vim'  , 'init.vim']
+let g:which_key_map['b'] = [ '<C-W>s'                     , 'split below']
 let g:which_key_map['r'] = [ ':Ranger'                    , 'ranger' ]
 let g:which_key_map['S'] = [ ':Dashboard'                  , 'start screen' ]
 let g:which_key_map['T'] = [ ':Rg'                        , 'search text' ]
@@ -212,7 +219,26 @@ let g:which_key_map.s = {
 " Register which key map
 call which_key#register('<Space>', "g:which_key_map")
 
-" nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-" " By default timeoutlen is 1000 ms
-" set timeoutlen=500
+" personalized key bindigs 
+inoremap jk <esc>
+inoremap <esc> <nop>
+
+" give space before a comment 
+let g:NERDSpaceDelims = 1
+
+"to jump between tabs 
+
+" right
+nnoremap <localleader>d <C-w><C-l>        
+" down
+nnoremap <localleader>s <C-w><C-j> 
+" left
+nnoremap <localleader>a <C-w><C-h> 
+" up
+nnoremap <localleader>w <C-w><C-k> 
+
+" nmap <leader>F :.!toilet -w 200 -f standard<CR>
+" nmap <leader>f :.!toilet -w 200 -f small<CR>
+" " makes Ascii border
+" nmap <leader>1 :.!toilet -w 200 -f term -F border<CR>
 
